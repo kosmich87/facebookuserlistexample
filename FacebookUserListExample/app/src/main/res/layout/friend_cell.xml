@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/friend_cell_padding"
+    android:paddingRight="@dimen/friend_cell_padding">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_width="@dimen/friend_photo_size"
+        android:layout_height="@dimen/friend_photo_size"
+        android:id="@+id/friend_photo"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/friend_cell_margin"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/friend_name"
+        android:textSize="@dimen/friend_name_text_size"
+        android:textColor="@color/friend_name_text_color"
+        android:typeface="sans"
+        android:textStyle="bold"
+        android:layout_toRightOf="@+id/friend_photo"
+        android:layout_alignTop="@+id/friend_photo"
+        android:layout_toLeftOf="@+id/friend_status" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/place_of_birth"
+        android:layout_below="@+id/friend_name"
+        android:layout_alignLeft="@+id/friend_name" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/place_of_study"
+        android:layout_below="@+id/place_of_birth"
+        android:layout_alignLeft="@+id/place_of_birth" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/friend_status"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/presence_online"
+        android:layout_alignTop="@+id/friend_name" />
+
+</RelativeLayout>

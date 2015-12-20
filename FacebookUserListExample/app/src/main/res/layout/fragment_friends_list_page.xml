@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_background_color"
+    tools:context="kz.kkurtukov.facebookuserlistexample.ui.FriendsListPageFragment">
+
+    <ListView
+        android:id="@+id/friends_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="none"
+        android:divider="@color/divider_color"
+        android:dividerHeight="1dp">
+    </ListView>
+
+    <TextView
+        android:id="@+id/friends_listView_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_data" />
+</RelativeLayout>
