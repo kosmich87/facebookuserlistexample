@@ -15,5 +15,6 @@
     <string name="female_label">Female</string>
     <string name="child_label">Child</string>
     <string name="no_data">NO DATA</string>
+    <string name="search_hint">Enter last name...</string>
 
 </resources>

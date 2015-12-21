@@ -6,4 +6,6 @@
     <color name="divider_color">#FFFFFFFF</color>
     <color name="list_background_color">#FFFFFFFF</color>
     <color name="friend_name_text_color">#FF000000</color>
+    <color name="search_hint_color">#FF909090</color>
+    <color name="search_text_color">#FF606060</color>
 </resources>

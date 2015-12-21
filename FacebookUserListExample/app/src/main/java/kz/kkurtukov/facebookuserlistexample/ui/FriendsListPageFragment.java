@@ -1,11 +1,20 @@
 package kz.kkurtukov.facebookuserlistexample.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,8 +32,11 @@ public class FriendsListPageFragment extends Fragment {
     private int mPage;
     private ListView friendsListView;
     private ArrayList<FBUser> friendsArrayList;
+    private ArrayList<FBUser> friendsArrayListForSearch;
     private FriendsListAdapter mAdapter;
 
+    private EditText searchEditText;
+    private TextChangeListener textChangeListener;
 
     public FriendsListPageFragment() {
         // Required empty public constructor
@@ -41,11 +53,40 @@ public class FriendsListPageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        textChangeListener = new TextChangeListener();
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+
+        View actionView = MenuItemCompat.getActionView(item);
+        searchEditText = (EditText) actionView.findViewById(R.id.search_view);
+
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                hideKeyboard();
+                searchEditText.setText("");
+                return true;
+            }
+        });
+
+        searchEditText.addTextChangedListener(textChangeListener);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +99,15 @@ public class FriendsListPageFragment extends Fragment {
         friendsListView.setEmptyView(emptyTextView);
 
         friendsArrayList = new ArrayList<FBUser>();
+        friendsArrayListForSearch = new ArrayList<FBUser>();
+        contentArrayList();
+        mAdapter = new FriendsListAdapter(getActivity(), friendsArrayList);
+        friendsListView.setAdapter(mAdapter);
+
+        return view;
+    }
+
+    private void contentArrayList() {
         switch (mPage){
             case 0:
                 friendsArrayList.addAll(FBUserManager.getFriendsByGender("male"));
@@ -69,10 +119,38 @@ public class FriendsListPageFragment extends Fragment {
                 friendsArrayList.addAll(FBUserManager.getChilds());
                 break;
         }
-        mAdapter = new FriendsListAdapter(getActivity(), friendsArrayList);
-        friendsListView.setAdapter(mAdapter);
-
-        return view;
+        friendsArrayListForSearch.addAll(friendsArrayList);
     }
 
+    private class TextChangeListener implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            friendsArrayList.clear();
+            if (s.length() == 0){
+                friendsArrayList.addAll(friendsArrayListForSearch);
+            }else {
+                for (FBUser fbUser : friendsArrayListForSearch) {
+                    if (fbUser.lastName.toLowerCase().contains(s)) {
+                        friendsArrayList.add(fbUser);
+                    }
+                }
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager input = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        input.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
 }
